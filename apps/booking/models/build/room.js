@@ -1,32 +1,26 @@
 const { Client } = require('pg');
 
-class User{
-    constructor(id, pseudo, email, password, last_name, first_name, group){
+class Room{
+    constructor(id, name, description, price){
         this.id = id;
-        this.pseudo = pseudo; 
-this.email = email; 
-this.password = password; 
-this.last_name = last_name; 
-this.first_name = first_name; 
-this.group = group; 
+        this.name = name; 
+this.description = description; 
+this.price = price; 
 
     }
 }
 
-module.exports.User = User;
+module.exports.Room = Room;
 
-const UserModel = {
+const RoomModel = {
     createTable: () => new Promise((succes, fail) => {
         
         const CREATE_TABLE = `
-            CREATE TABLE users (
+            CREATE TABLE rooms (
                 id serial PRIMARY KEY, 
-            pseudo VARCHAR(50),
-            email VARCHAR(100),
-            password TEXT,
-            last_name VARCHAR(50),
-            first_name VARCHAR(50),
-            group INTEGER REFERENCES groups(id)
+            name VARCHAR(40),
+            description TEXT,
+            price FLOAT
             );
         `;
         const client = new Client();
@@ -38,20 +32,20 @@ const UserModel = {
         });
     
     }),
-    insert: (pseudo, email, password, last_name, first_name, group) => new Promise((succes, fail) => {
+    insert: (name, description, price) => new Promise((succes, fail) => {
         
         const INSERT = `
         INSERT INTO
-            users(pseudo, email, password, last_name, first_name, group)
-        VALUES('${pseudo}', '${email}', '${password}', '${last_name}', '${first_name}', ${group});
-        SELECT currval('users_id_seq');
+            rooms(name, description, price)
+        VALUES('${name}', '${description}', ${price});
+        SELECT currval('rooms_id_seq');
     `;
         const client = new Client();
         client.connect();
         client.query(INSERT)
             .then((res) => {
             client.end();
-            succes(new User(res[1].rows[0].currval,pseudo, email, password, last_name, first_name, group));
+            succes(new Room(res[1].rows[0].currval,name, description, price));
             })
             .catch((err) => {
             client.end();
@@ -63,9 +57,9 @@ const UserModel = {
         
         const SELECT = `
         SELECT
-            id, pseudo, email, password, last_name, first_name, group
+            id, name, description, price
         FROM
-            users
+            rooms
         ${condition !== '' ? 'WHERE' : ''} ${condition};
         `;
         const client = new Client();
@@ -74,7 +68,7 @@ const UserModel = {
             .then((res) => {
             const objects = [];
             for (let i = 0; i < res.rows.length; i += 1) {
-                objects.push(new User(res.rows[i].id, res.rows[i].pseudo, res.rows[i].email, res.rows[i].password, res.rows[i].last_name, res.rows[i].first_name, res.rows[i].group));
+                objects.push(new Room(res.rows[i].id, res.rows[i].name, res.rows[i].description, res.rows[i].price));
             }
             client.end();
             succes(objects);
@@ -88,7 +82,7 @@ const UserModel = {
     update: (object, condition) => new Promise((succes, fail) => {
         
             const UPDATE = `
-            UPDATE users
+            UPDATE rooms
             SET
             ${Object.keys(object).map((key)=>`${key} = ${object[key]}`)}
             ${condition !== '' ? 'WHERE' : ''} ${condition};
@@ -111,7 +105,7 @@ const UserModel = {
         const DELETE = `
         DELETE
         FROM
-            users
+            rooms
         ${condition !== '' ? 'WHERE' : ''} ${condition};
         `;
         const client = new Client();
@@ -130,4 +124,4 @@ const UserModel = {
 }
 
 
-module.exports.UserModel = UserModel;
+module.exports.RoomModel = RoomModel;

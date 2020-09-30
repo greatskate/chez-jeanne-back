@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(index);
 
 const server = http.createServer(app);
+/*
 db.create()
   .then(() => {
     console.log('Tables Sync');
@@ -23,6 +24,7 @@ db.create()
   .catch(() => {
     console.log('Table Already Sync');
   });
+  */
 server.listen(PORT, () => {
     console.log(`chez-jeanne listening on port ${PORT}!`);
   });
