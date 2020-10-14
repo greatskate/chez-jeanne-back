@@ -15,14 +15,14 @@ const routes = (router, middleware) => {
     /* REST ROUTES */
     router.get('/booking/rooms/', RoomRestHandlers.get);
     router.get('/booking/rooms/:id', RoomRestHandlers.getOne);
-    router.put('/booking/rooms/:id', RoomRestHandlers.put);
-    router.post('/booking/rooms/', RoomRestHandlers.post);
-    router.delete('/booking/rooms/:id', RoomRestHandlers.delete);
-    router.get('/booking/pictures/', PictureRestHandlers.get);
+    router.put('/booking/rooms/:id', middleware.admin, RoomRestHandlers.put);
+    router.post('/booking/rooms/', middleware.admin, RoomRestHandlers.post);
+    router.delete('/booking/rooms/:id', middleware.admin, RoomRestHandlers.delete);
+    router.get('/booking/rooms/:idRoom/pictures/', PictureRestHandlers.get);
     router.get('/booking/pictures/:id', PictureRestHandlers.getOne);
     router.put('/booking/pictures/:id', PictureRestHandlers.put);
-    router.post('/booking/pictures/', PictureRestHandlers.post);
-    router.delete('/booking/pictures/:id', PictureRestHandlers.delete);
+    router.post('/booking/pictures/', middleware.admin, PictureRestHandlers.post);
+    router.delete('/booking/pictures/:id', middleware.admin, PictureRestHandlers.delete);
     router.get('/booking/bookings/', BookingRestHandlers.get);
     router.get('/booking/bookings/:id', BookingRestHandlers.getOne);
     router.put('/booking/bookings/:id', BookingRestHandlers.put);

@@ -84,7 +84,6 @@ const UserModel = {
             users
         ${condition !== '' ? 'WHERE' : ''} ${condition};
         `;
-        console.log(SELECT);
         const client = new Client();
         client.connect();
         client.query(SELECT)

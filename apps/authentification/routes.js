@@ -10,6 +10,7 @@ const routes = (router, middleware) => {
         res.send('authentification routes Works !')
     })
     router.post('/auth/', Handler.auth);
+    router.get('/auth/',middleware.logged, Handler.authGet);
     /* REST ROUTES */
     router.get('/authentification/users/', middleware.admin, UserRestHandlers.get);
     router.get('/authentification/users/:id', middleware.admin, UserRestHandlers.getOne);

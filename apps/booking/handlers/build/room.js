@@ -1,10 +1,26 @@
-const { RoomModel } = require("../../models")
+const { RoomModel } = require("../../models");
+const { PictureModel } = require("../../models/build/picture");
 
 const RoomRestHandlers = {
     get:(req, res)=>{
         RoomModel.select('')
-        .then((users)=>{
-            res.send(users);
+        .then((rooms)=>{
+            const returnRooms = rooms;
+            for(let i = 0; i<returnRooms.length;i++){
+                returnRooms[i].pictures = [];
+            }
+            PictureModel.select('').then(
+                (pictures)=>{
+                    for(let i = 0;i<pictures.length;i++){
+                        for (let j = 0; j<returnRooms.length; j++){
+                            if (pictures[i].room === returnRooms[j].id){
+                                returnRooms[j].pictures.push(pictures[i]);
+                            }
+                        }
+                    }
+                    res.send(returnRooms);
+                }
+            )
         })
         .catch((err)=>{
             throw err;

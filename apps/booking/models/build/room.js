@@ -84,7 +84,7 @@ const RoomModel = {
             const UPDATE = `
             UPDATE rooms
             SET
-            ${Object.keys(object).map((key)=>`${key} = ${object[key]}`)}
+            ${Object.keys(object).map((key)=>`${key} = '${object[key]}'`)}
             ${condition !== '' ? 'WHERE' : ''} ${condition};
         `;
             const client = new Client();

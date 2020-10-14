@@ -21,7 +21,6 @@ const create = async () =>{
 
 const auth = (req, res) => {
     const { email, password } = req.body;
-    console.log("Try");
     UserModel.select(`email = '${email}'`)
       .then((users) => {
         if (users.length > 0) {
@@ -49,10 +48,15 @@ const auth = (req, res) => {
       });
   };
 
+const authGet = (req, res) => {
+    res.send(req.user);
+  };
+
 function generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 }
 module.exports.createRestHandlers = create;
 module.exports.auth = auth;
+module.exports.authGet = authGet;
 module.exports.UserRestHandlers = UserRestHandlers;
 /* Export REST */

@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 const http = require('http');
 const cors = require('cors');
 
@@ -11,7 +12,9 @@ const app = express();
 
 const index = require('./routes/index')
 
+app.use(express.static(__dirname + '/public'));
 app.use(cors());
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(index);
 
